@@ -108,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.permissions.request(
             { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
-                alert(granted);
                 if (granted) {
                     retriveURL(function (url, title) { chrome.downloads.download({ url: url, filename: title }); alert('Your download will start shortly...') });
                 } else {
