@@ -8,10 +8,11 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "https://xmum.mediasitecloud.jp/",
-        "https://l.xmu.edu.my/",
-        "activeTab",
         "tabs",
         "cookies"
+    ],
+    "optional_permissions": [
+        "https://xmum.mediasitecloud.jp/",
+        "https://l.xmu.edu.my/"
     ]
 }
