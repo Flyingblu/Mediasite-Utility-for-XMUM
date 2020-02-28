@@ -8,8 +8,9 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "tabs",
-        "cookies"
+        "activeTab",
+        "cookies",
+        "downloads"
     ],
     "optional_permissions": [
         "https://xmum.mediasitecloud.jp/",

@@ -1,4 +1,4 @@
-function retriveURL() {
+function retriveURL(callback) {
     chrome.cookies.get({ url: "https://l.xmu.edu.my/", name: "MoodleSession" }, function (cookie) {
 
         chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
@@ -8,6 +8,7 @@ function retriveURL() {
                 alert("Please use this function on a moodle media page! ");
                 return;
             }
+
             var video_id = /\d+/.exec(url)[0];
 
             var myHeaders = new Headers();
@@ -75,7 +76,8 @@ function retriveURL() {
                         .catch(function (error) { alert("An error occurred: \n" + error); return; });
 
                     function handleResult(result) {
-                        alert(JSON.parse(result)['d']['Presentation']['Streams'][0]['VideoUrls'][0]['Location']);
+                        result = JSON.parse(result);
+                        callback(result['d']['Presentation']['Streams'][0]['VideoUrls'][0]['Location'], result['d']['Presentation']['Title']);
                     }
 
                 });
@@ -91,7 +93,24 @@ document.addEventListener('DOMContentLoaded', function () {
             { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    retriveURL();
+                    retriveURL(function (url, title) {
+                        alert('Title: ' + title + '\nLink: \n' + url);
+                    });
+                } else {
+                    alert("Permission is needed to access data on the website!\nPlease try again. ");
+                }
+            });
+
+    }, false);
+
+    document.getElementById('directDownload').addEventListener('click', function () {
+
+        chrome.permissions.request(
+            { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
+            function (granted) {
+                alert(granted);
+                if (granted) {
+                    retriveURL(function (url, title) { chrome.downloads.download({ url: url, filename: title }); alert('Your download will start shortly...') });
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
