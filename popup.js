@@ -88,18 +88,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('getLink').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/'] },
+            { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    chrome.permissions.request(
-                        { origins: ['https://xmum.mediasitecloud.jp/'] },
-                        function (granted) {
-                            if (granted) {
-                                retriveURL();
-                            } else {
-                                alert("Permission is needed to access data on the website!\nPlease try again. ");
-                            }
-                        });
+                    retriveURL();
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
