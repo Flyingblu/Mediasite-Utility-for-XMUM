@@ -1,6 +1,8 @@
 # XMUM Mediasite downloader
 
-此插件可以自动获取当前标签页的moodle视频
+此插件有两个主要功能
+* 获取链接 & 下载视频
+* 一键消除Access denied错误
 
 ## 安装步骤
 
@@ -15,10 +17,14 @@
 ![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/load%20unpacked.png "load unpacked")<br>
 在新弹出的打开窗口中，选择刚才解压至的文件夹，并点击打开。<br>
 ![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/select%20directory.png "select directory")<br>
-此时插件已经安装在了你的chrome上。你只需要打开任意一个moodle视频页面，并点击右上角插件中的`Get video link!`，第一次使用会弹出权限请求，请点击允许。<br>
-![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/allow%20permission.png "allow permission")<br>
-再次点击之后下载链接便会弹出。你可以复制整段链接，并将其粘贴在你的下载器中（IDM, FDM, 迅雷, etc）即刻开始下载。你也可以将链接粘贴至chrome的地址栏，便可更快地打开视频。<br>
-![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/link.png "allow permission")<br>
+此时插件已经安装在了你的chrome上。你只需要打开任意一个moodle视频页面，并点击右上角插件中的`Get video link`，第一次使用会弹出权限请求，请点击允许。<br>
+至此，安装成功<br>
+
+## 功能介绍
+点击`Get get link`之后稍待片刻下载链接便会弹出。其中title为文件名，link为下载链接。你可以复制整段链接，并将其粘贴在你的下载器中（IDM, FDM, aria2, 迅雷, etc）即可开始下载。你也可以将链接粘贴至chrome的地址栏，便可更快地打开视频。<br>
+![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/link.png "link")<br><br>
+点击`Direct download`可直接用浏览器下载该视频<br>
+点击`Fix access denied error`可一键修复access denied<br>
 ## 最后
 
-如对此插件有任何疑问，欢迎在issue中讨论！
+如对此插件有任何疑问，欢迎在issues中讨论！
