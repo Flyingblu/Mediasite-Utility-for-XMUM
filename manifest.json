@@ -10,7 +10,8 @@
     "permissions": [
         "activeTab",
         "cookies",
-        "downloads"
+        "downloads",
+        "storage"
     ],
     "optional_permissions": [
         "https://xmum.mediasitecloud.jp/",

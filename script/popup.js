@@ -93,9 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
             { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    retriveURL(function (url, title) {
-                        alert('Title: ' + title + '\nLink: \n' + url);
-                    });
+                    retriveURL((url, title) =>
+                        chrome.storage.local.set({ 'url': url, 'title': title }, () =>
+                            chrome.windows.create({ url: chrome.extension.getURL('link.html'), type: 'popup', width: 520, height: 260 })
+                        ));
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
