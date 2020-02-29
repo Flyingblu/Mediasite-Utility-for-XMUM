@@ -27,4 +27,5 @@
 点击`Fix access denied error`可一键修复access denied<br>
 ## 最后
 
+使用本插件下载和观看视频不会在Moodle系统中留下观看记录，还是需要把浏览器挂上刷记录的，除非......<br>
 如对此插件有任何疑问，欢迎在issues中讨论！
