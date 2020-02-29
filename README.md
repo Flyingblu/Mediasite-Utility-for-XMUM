@@ -21,7 +21,7 @@
 至此，安装成功<br>
 
 ## 功能介绍
-点击`Get get link`之后稍待片刻下载链接便会弹出。其中title为文件名，link为下载链接。你可以复制整段链接，并将其粘贴在你的下载器中（IDM, FDM, aria2, 迅雷, etc）即可开始下载。你也可以将链接粘贴至chrome的地址栏，便可更快地打开视频。<br>
+点击`Get video link`之后稍待片刻下载链接便会出现。其中title为文件名，link为下载链接。你可以复制链接，并将其粘贴在你的下载器中（IDM, FDM, aria2, 迅雷, etc）即可开始下载。你也可以将链接粘贴至chrome的地址栏，便可更快地打开视频。<br>
 ![alt text](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/link.png "link")<br><br>
 点击`Direct download`可直接用浏览器下载该视频<br>
 点击`Fix access denied error`可一键修复access denied<br>
