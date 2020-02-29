@@ -1,18 +1,50 @@
 <!doctype html>
-<html style="min-width:200px;"">
+<html style="min-width:350px;"">
 
 <head>
     <title>Moodle Utility</title>
-    <script src=" popup.js">
-    </script>
-<script src="addon.js"></script>
+    <!--Import Google Icon Font-->
+    <link href=" https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+
+<style>
+    nav {
+        height: 50px;
+        line-height: 50px;
+    }
+</style>
 </head>
 
 <body>
-    <h1>Moodle Utility</h1>
-    <button id="getLink" style="margin-bottom: 10px">Get video link</button>
-    <button id="directDownload" style="margin-bottom: 10px">Direct download</button>
-    <button id="fixAuth" style="margin-bottom: 10px">Fix access denied error</button>
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="container">
+                    <h5>Moodle Utility</h5>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <div class="row" id="button-row">
+            <div class="col s6">
+                <a class="waves-effect waves-light btn-small" id="getLink" style="width: 100%;">Get video link</a>
+            </div>
+            <div class="col s6">
+                <a class="waves-effect waves-light btn-small" id="directDownload" style="width: 100%;">Download</a>
+            </div>
+            <div class="col s12">
+                <a class="waves-effect waves-light btn-small" id="fixAuth" style="width: 100%;">Fix access denied
+                    error</a>
+            </div>
+        </div>
+    </div>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="script/materialize.min.js"></script>
+    <script src=" script/popup.js"></script>
+    <script src="script/addon.js"></script>
 </body>
 
 </html>
