@@ -128,7 +128,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         cookies.forEach(function (cookie) {
                             chrome.cookies.remove({ url: "https://xmum.mediasitecloud.jp/", name: cookie.name });
                         });
-                    })
+
+                        chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
+
+                            var url = currentTabs[0].url;
+                            if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
+                                return;
+                            }
+                            chrome.tabs.reload();
+                        });
+                    });
 
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
