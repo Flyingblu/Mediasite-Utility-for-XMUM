@@ -1,10 +1,10 @@
 <!doctype html>
-<html style="min-width:350px;"">
+<html style="min-width:350px; min-height:150px"">
 
 <head>
     <title>Moodle Utility</title>
     <!--Import Google Icon Font-->
-    <link href=" https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href=" css/icon?family=Material+Icons" rel="stylesheet">
 <!--Import materialize.css-->
 <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
 
@@ -26,7 +26,7 @@
             </div>
         </nav>
     </div>
-    <div class="container">
+    <div class="container" id="buttonsContainer">
         <div class="row" id="button-row">
             <div class="col s6">
                 <a class="waves-effect waves-light btn-small" id="getLink" style="width: 100%;">Get video link</a>
@@ -37,6 +37,59 @@
             <div class="col s12">
                 <a class="waves-effect waves-light btn-small" id="fixAuth" style="width: 100%;">Fix access denied
                     error</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="center hide" id="loadingIndicator">
+
+        <div class="preloader-wrapper active">
+            <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+
+            <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
             </div>
         </div>
     </div>

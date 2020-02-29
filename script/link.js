@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dataField.appendChild(prompt);
     });
 
-    document.getElementById('closePage').addEventListener('click', () => window.close());
+    document.getElementById('backPage').addEventListener('click', () => history.back());
 
     document.getElementById('copyTitle').addEventListener('click', function () {
         var range = document.createRange();

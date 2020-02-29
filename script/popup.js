@@ -31,7 +31,7 @@ function retriveURL(callback) {
             fetch("https://l.xmu.edu.my/mod/mediasite/content_launch.php?id=" + video_id + "&a=0&frameset&inpopup=0", requestOptions)
                 .then(response => response.text())
                 .then(result => getURL(result))
-                .catch(function (error) { alert("An error occurred: \n" + error); return; });
+                .catch(error => { throw error });
 
             function getURL(api_response) {
                 var response = document.createElement('html');
@@ -73,7 +73,7 @@ function retriveURL(callback) {
                     fetch("https://xmum.mediasitecloud.jp/Mediasite/PlayerService/PlayerService.svc/json/GetPlayerOptions", requestOptions)
                         .then(response => response.text())
                         .then(result => handleResult(result))
-                        .catch(function (error) { alert("An error occurred: \n" + error); return; });
+                        .catch(error => { throw error });
 
                     function handleResult(result) {
                         result = JSON.parse(result);
@@ -93,10 +93,19 @@ document.addEventListener('DOMContentLoaded', function () {
             { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    retriveURL((url, title) =>
-                        chrome.storage.local.set({ 'url': url, 'title': title }, () =>
-                            chrome.windows.create({ url: chrome.extension.getURL('link.html'), type: 'popup', width: 520, height: 260 })
-                        ));
+                    document.getElementById('buttonsContainer').classList.add('hide');
+                    document.getElementById('loadingIndicator').classList.remove('hide');
+                    try {
+                        retriveURL((url, title) =>
+                            chrome.storage.local.set({ 'url': url, 'title': title }, function () {
+                                window.location.href = chrome.extension.getURL('link.html');
+                            }
+                            ));
+                    } catch (err) {
+                        alert("An error occurred: \n" + error);
+                        document.getElementById('loadingIndicator').classList.add('hide');
+                        document.getElementById('buttonsContainer').classList.remove('hide');
+                    }
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
@@ -110,7 +119,20 @@ document.addEventListener('DOMContentLoaded', function () {
             { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    retriveURL(function (url, title) { chrome.downloads.download({ url: url, filename: title }); alert('Your download will start shortly...') });
+                    document.getElementById('buttonsContainer').classList.add('hide');
+                    document.getElementById('loadingIndicator').classList.remove('hide');
+                    try {
+                        retriveURL(function (url, title) {
+                            chrome.downloads.download({ url: url, filename: title });
+                            document.getElementById('loadingIndicator').classList.add('hide');
+                            document.getElementById('buttonsContainer').classList.remove('hide');
+                            alert('Your download will start shortly...')
+                        });
+                    } catch (err) {
+                        alert("An error occurred: \n" + error);
+                        document.getElementById('loadingIndicator').classList.add('hide');
+                        document.getElementById('buttonsContainer').classList.remove('hide');
+                    }
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
