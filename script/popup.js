@@ -1,11 +1,10 @@
 function retriveURL(callback) {
     chrome.cookies.get({ url: "https://l.xmu.edu.my/", name: "MoodleSession" }, function (cookie) {
-
         chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
 
             var url = currentTabs[0].url;
             if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
-                alert("Please use this function on a moodle media page! ");
+                window.location.href = chrome.extension.getURL('notice.html');
                 return;
             }
 
@@ -31,7 +30,7 @@ function retriveURL(callback) {
             fetch("https://l.xmu.edu.my/mod/mediasite/content_launch.php?id=" + video_id + "&a=0&frameset&inpopup=0", requestOptions)
                 .then(response => response.text())
                 .then(result => getURL(result))
-                .catch(error => { throw error });
+                .catch(error => handleErr(error));
 
             function getURL(api_response) {
                 var response = document.createElement('html');
@@ -46,6 +45,7 @@ function retriveURL(callback) {
                             break;
                         }
                     }
+                    if (typeof media_cookie === 'undefined') throw new Error('Mediasite cookie not found');
 
                     var myHeaders = new Headers();
                     myHeaders.append("Connection", "keep-alive");
@@ -73,7 +73,7 @@ function retriveURL(callback) {
                     fetch("https://xmum.mediasitecloud.jp/Mediasite/PlayerService/PlayerService.svc/json/GetPlayerOptions", requestOptions)
                         .then(response => response.text())
                         .then(result => handleResult(result))
-                        .catch(error => { throw error });
+                        .catch(error => handleErr(error));
 
                     function handleResult(result) {
                         result = JSON.parse(result);
@@ -86,6 +86,12 @@ function retriveURL(callback) {
     });
 }
 
+function handleErr(error) {
+    chrome.storage.local.set({ 'error': error.message }, function () {
+        window.location.href = chrome.extension.getURL('error.html');
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('getLink').addEventListener('click', function () {
 
@@ -95,19 +101,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
                     document.getElementById('loadingIndicator').classList.remove('hide');
-                    try {
-                        retriveURL((url, title) =>
-                            chrome.storage.local.set({ 'url': url, 'title': title }, function () {
-                                window.location.href = chrome.extension.getURL('link.html');
-                            }
-                            ));
-                    } catch (err) {
-                        alert("An error occurred: \n" + error);
-                        document.getElementById('loadingIndicator').classList.add('hide');
-                        document.getElementById('buttonsContainer').classList.remove('hide');
-                    }
+                    retriveURL((url, title) =>
+                        chrome.storage.local.set({ 'url': url, 'title': title }, function () {
+                            window.location.href = chrome.extension.getURL('link.html');
+                        }
+                        ));
                 } else {
-                    alert("Permission is needed to access data on the website!\nPlease try again. ");
+                    handleErr(new Error("Permission is needed to access data on the website!\nPlease try again. "));
                 }
             });
 
@@ -121,18 +121,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
                     document.getElementById('loadingIndicator').classList.remove('hide');
-                    try {
-                        retriveURL(function (url, title) {
-                            chrome.downloads.download({ url: url, filename: title });
-                            document.getElementById('loadingIndicator').classList.add('hide');
-                            document.getElementById('buttonsContainer').classList.remove('hide');
-                            alert('Your download will start shortly...')
+
+                    retriveURL(function (url, title) {
+                        chrome.downloads.download({ url: url, filename: title });
+                        chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
+                            window.location.href = chrome.extension.getURL('success.html');
                         });
-                    } catch (err) {
-                        alert("An error occurred: \n" + error);
-                        document.getElementById('loadingIndicator').classList.add('hide');
-                        document.getElementById('buttonsContainer').classList.remove('hide');
-                    }
+                    });
+
                 } else {
                     alert("Permission is needed to access data on the website!\nPlease try again. ");
                 }
@@ -155,6 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
 
                             var url = currentTabs[0].url;
+                            chrome.storage.local.set({ 'success': 'Error fixed' }, function () {
+                                window.location.href = chrome.extension.getURL('success.html');
+                            });
                             if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
                                 return;
                             }
