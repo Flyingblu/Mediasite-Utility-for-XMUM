@@ -1,6 +1,7 @@
 export function retriveURL(srcURL, callback, handleErr) {
     chrome.cookies.get({ url: "https://l.xmu.edu.my/", name: "MoodleSession" }, function (cookie) {
 
+        if (cookie === null) handleErr(new Error('Your moodle session is invalid, please refresh to login moodle. '));
         var video_id = /\d+/.exec(srcURL)[0];
 
         var myHeaders = new Headers();
@@ -32,13 +33,8 @@ export function retriveURL(srcURL, callback, handleErr) {
 
             chrome.cookies.getAll({ url: "https://xmum.mediasitecloud.jp/" }, function (cookies) {
                 var media_cookie;
-                for (var i = 0; i < cookies.length; i++) {
-                    if (cookies[i].name.includes("MediasiteAuthTickets-")) {
-                        media_cookie = cookies[i];
-                        break;
-                    }
-                }
-                if (typeof media_cookie === 'undefined') throw new Error('Mediasite cookie not found');
+                media_cookie = cookies.find(c => c.name.includes("MediasiteAuthTickets-"));
+                if (typeof media_cookie === 'undefined') handleErr(new Error('Mediasite cookie not found, please open a video first. '));
 
                 var myHeaders = new Headers();
                 myHeaders.append("Connection", "keep-alive");
@@ -70,7 +66,11 @@ export function retriveURL(srcURL, callback, handleErr) {
 
                 function handleResult(result) {
                     result = JSON.parse(result);
-                    callback(result['d']['Presentation']['Streams'][0]['VideoUrls'][0]['Location'], result['d']['Presentation']['Title']);
+                    result = result['d']['Presentation'];
+                    if (result === null) throw new Error('Failed to fetch presentation information. Please refresh the video page and try again. ');
+                    var video_loc = result['Streams'][0]['VideoUrls'][0];
+                    if (typeof video_loc === 'undefined') throw new Error('Failed to fetch video information. Is your presentation actually not a video? This plugin only works with video presentations. ');
+                    callback(video_loc['Location'], result['Title']);
                 }
 
             });
