@@ -12,6 +12,10 @@
 
 也可以选择[手动安装](https://github.com/Flyingblu/XMUM-Mediasite-downloader/blob/master/installation.md)的方式<br>
 
+This extension is now available on the [Chrome Web Store](https://chrome.google.com/webstore/detail/mediasite-downloader-for/encdibphpbcflikohhlfbbkcdllejbcg)<br>
+
+You can also [install this extension manually](https://github.com/Flyingblu/XMUM-Mediasite-downloader/blob/master/installation.md). <br>
+
 ## 功能介绍
 点击`Get video link`之后稍待片刻下载链接便会出现。其中title为文件名，link为下载链接。你可以复制链接，并将其粘贴在你的下载器中（IDM, FDM, aria2, 迅雷, etc）即可开始下载。你也可以将链接粘贴至chrome的地址栏，便可更快地打开视频。<br>
 ![link](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/link.png "link")<br><br>
