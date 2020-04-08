@@ -1,3 +1,44 @@
+export async function getMediasiteCookies(api_response) {
+    const encodeFormData = (data) => {
+        return Object.keys(data)
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+            .join('&');
+    };
+
+    var response = new DOMParser().parseFromString(api_response, 'text/xml');
+    var body_fields = response.getElementsByTagName('input');
+    var body = {}
+    for (var i = 0; i < body_fields.length; i++) {
+        body[body_fields[i].getAttribute('name')] = body_fields[i].getAttribute('value');
+    }
+    var mediasite_id = response.querySelector('input[name="mediasiteid"]').getAttribute('value');
+    var url = response.querySelector('form').getAttribute('action');
+
+    var headers = {
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Origin': 'https://l.xmu.edu.my',
+        'Upgrade-Insecure-Requests': '1',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
+        'Sec-Fetch-Dest': 'iframe',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'navigate',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
+        'Cookie': 'SERVERID=s1'
+    };
+
+    var requestOptions = {
+        method: 'POST',
+        headers: headers,
+        body: encodeFormData(body),
+        redirect: 'follow'
+    };
+    response = await fetch(url, requestOptions).then(response => response.text());
+    return { name: 'MediasiteAuthTickets-' + mediasite_id, value: /authTicket=([a-z 0-9]+)/.exec(response)[1], domain: /https:\/\/[^\/]+/.exec(url)[0] };
+}
+
 export function retriveURL(srcURL, callback, handleErr) {
     chrome.cookies.get({ url: "https://l.xmu.edu.my/", name: "MoodleSession" }, function (cookie) {
 
@@ -27,15 +68,10 @@ export function retriveURL(srcURL, callback, handleErr) {
             .catch(error => handleErr(error));
 
         function getURL(api_response) {
-            var response = document.createElement('html');
-            response.innerHTML = api_response;
-            var id = response.querySelector('input[name="mediasiteid"]').value;
 
-            chrome.cookies.getAll({ url: "https://xmum.mediasitecloud.jp/" }, function (cookies) {
-                var media_cookie;
-                media_cookie = cookies.find(c => c.name.includes("MediasiteAuthTickets-"));
-                if (typeof media_cookie === 'undefined') handleErr(new Error('Mediasite cookie not found, please open a video first. '));
-
+            getMediasiteCookies(api_response).then(media_cookie => {
+                var mediasite_id = /MediasiteAuthTickets-(\S+)/.exec(media_cookie.name)[1];
+                var url = media_cookie.domain + "/Mediasite/PlayerService/PlayerService.svc/json/GetPlayerOptions";
                 var myHeaders = new Headers();
                 myHeaders.append("Connection", "keep-alive");
                 myHeaders.append("Accept", "application/json, text/javascript, */*; q=0.01");
@@ -43,23 +79,26 @@ export function retriveURL(srcURL, callback, handleErr) {
                 myHeaders.append("X-Requested-With", "XMLHttpRequest");
                 myHeaders.append("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36");
                 myHeaders.append("Content-Type", "application/json; charset=UTF-8");
-                myHeaders.append("Origin", "https://xmum.mediasitecloud.jp");
                 myHeaders.append("Sec-Fetch-Site", "same-origin");
                 myHeaders.append("Sec-Fetch-Mode", "cors");
-                myHeaders.append("Referer", "https://xmum.mediasitecloud.jp/Mediasite/Play/" + id);
                 myHeaders.append("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
                 myHeaders.append("Cookie", media_cookie.name + "=" + media_cookie.value);
 
-                var raw = "{\n    \"getPlayerOptionsRequest\": {\n        \"ResourceId\": \"" + id + "\",\n        \"QueryString\": \"\",\n        \"UseScreenReader\": false,\n        \"UrlReferrer\": \"https://xmum.mediasitecloud.jp/Mediasite/Play/" + id + "\"\n    }\n}";
-
+                var body = {
+                    getPlayerOptionsRequest: {
+                        ResourceId: mediasite_id,
+                        QueryString: "",
+                        UseScreenReader: false,
+                        UrlReferrer: media_cookie.domain + '/Mediasite/Play/' + mediasite_id
+                    }
+                };
                 var requestOptions = {
                     method: 'POST',
                     headers: myHeaders,
-                    body: raw,
+                    body: JSON.stringify(body),
                     redirect: 'follow'
                 };
-
-                fetch("https://xmum.mediasitecloud.jp/Mediasite/PlayerService/PlayerService.svc/json/GetPlayerOptions", requestOptions)
+                fetch(url, requestOptions)
                     .then(response => response.text())
                     .then(result => handleResult(result))
                     .catch(error => handleErr(error));
@@ -72,7 +111,6 @@ export function retriveURL(srcURL, callback, handleErr) {
                     if (typeof video_loc === 'undefined') throw new Error('Failed to fetch video information. Is your presentation actually not a video? This plugin only works with video presentations. ');
                     callback(video_loc['Location'], result['Title']);
                 }
-
             });
         }
     });

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('getLink').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
+            { origins: ['https://l.xmu.edu.my/'] },
             function (granted) {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('directDownload').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
+            { origins: ['https://l.xmu.edu.my/'] },
             function (granted) {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('fixAuth').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://xmum.mediasitecloud.jp/'] },
+            { origins: ['https://xmum.mediasitecloud.jp/', 'https://mymedia.xmu.edu.cn/'] },
             function (granted) {
                 if (granted) {
 

@@ -24,6 +24,7 @@
     ],
     "optional_permissions": [
         "https://xmum.mediasitecloud.jp/",
-        "https://l.xmu.edu.my/"
+        "https://l.xmu.edu.my/",
+        "https://mymedia.xmu.edu.cn/"
     ]
 }
