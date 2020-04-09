@@ -28,15 +28,7 @@ export function retriveURL(srcURL, callback, handleErr) {
         var video_id = /\d+/.exec(srcURL)[0];
 
         var myHeaders = new Headers();
-        myHeaders.append("authority", "l.xmu.edu.my");
-        myHeaders.append("upgrade-insecure-requests", "1");
-        myHeaders.append("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36");
-        myHeaders.append("sec-fetch-dest", "iframe");
         myHeaders.append("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        myHeaders.append("sec-fetch-site", "same-origin");
-        myHeaders.append("sec-fetch-mode", "navigate");
-        myHeaders.append("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
-        myHeaders.append("cookie", cookie.name + '=' + cookie.value);
 
         var requestOptions = {
             method: 'GET',
@@ -57,7 +49,6 @@ export function retriveURL(srcURL, callback, handleErr) {
                 var myHeaders = new Headers();
                 myHeaders.append("Accept", "application/json, text/javascript, */*; q=0.01");
                 myHeaders.append("Content-Type", "application/json; charset=UTF-8");
-                myHeaders.append("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
 
                 var body = {
                     getPlayerOptionsRequest: {
