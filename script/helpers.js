@@ -1,40 +1,36 @@
-export async function getMediasiteCookies(api_response) {
-    const encodeFormData = (data) => {
-        return Object.keys(data)
-            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-            .join('&');
-    };
+export async function getMediasiteCookies(api_response, handleErr) {
 
     var response = new DOMParser().parseFromString(api_response, 'text/xml');
     var body_fields = response.getElementsByTagName('input');
-    var body = {}
+    var body = new URLSearchParams();
     for (var i = 0; i < body_fields.length; i++) {
-        body[body_fields[i].getAttribute('name')] = body_fields[i].getAttribute('value');
+        body.append(body_fields[i].getAttribute('name'), body_fields[i].getAttribute('value'));
     }
     var mediasite_id = response.querySelector('input[name="mediasiteid"]').getAttribute('value');
     var url = response.querySelector('form').getAttribute('action');
 
-    var headers = {
-        'Connection': 'keep-alive',
-        'Cache-Control': 'max-age=0',
-        'Origin': 'https://l.xmu.edu.my',
-        'Upgrade-Insecure-Requests': '1',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
-        'Sec-Fetch-Dest': 'iframe',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-        'Sec-Fetch-Site': 'cross-site',
-        'Sec-Fetch-Mode': 'navigate',
-        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7',
-        'Cookie': 'SERVERID=s1'
-    };
+    var myHeaders = new Headers();
+    myHeaders.append("cache-control", "max-age=0");
+    myHeaders.append("upgrade-insecure-requests", "1");
+    myHeaders.append("origin", "https://l.xmu.edu.my");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("content-type", "application/x-www-form-urlencoded");
+    myHeaders.append("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36");
+    myHeaders.append("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+    myHeaders.append("sec-fetch-site", "cross-site");
+    myHeaders.append("sec-fetch-mode", "navigate");
+    myHeaders.append("sec-fetch-user", "?1");
+    myHeaders.append("sec-fetch-dest", "iframe");
+    myHeaders.append("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
+    myHeaders.append("cookie", "MediasiteAuthTickets-2e74ad7bce324824945e410c874a03081d=1898ae8fc83040e488df613464649a3a; MediasiteAuthTickets-a6034152be354f0193006f6178eb00d51d=56d4bcdadbd64ab49420ff835d2d3d2b; ASP.NET_SessionId=z53rj3woyathzlu2ntry3xv0");
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     var requestOptions = {
         method: 'POST',
-        headers: headers,
-        body: encodeFormData(body),
         redirect: 'follow'
     };
+    requestOptions.headers = myHeaders;
+    requestOptions.body = body;
     response = await fetch(url, requestOptions).then(response => response.text());
     return { name: 'MediasiteAuthTickets-' + mediasite_id, value: /authTicket=([a-z 0-9]+)/.exec(response)[1], domain: /https:\/\/[^\/]+/.exec(url)[0] };
 }
@@ -111,7 +107,7 @@ export function retriveURL(srcURL, callback, handleErr) {
                     if (typeof video_loc === 'undefined') throw new Error('Failed to fetch video information. Is your presentation actually not a video? This plugin only works with video presentations. ');
                     callback(video_loc['Location'], result['Title']);
                 }
-            });
+            }).catch(error => handleErr(error));
         }
     });
 }
