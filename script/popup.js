@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('getLink').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/'] },
+            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
                             window.location.href = chrome.extension.getURL('notice.html');
                         }
-                        retriveURL(url, (url, title) =>
+                        retriveURL(/id=(\d+)/.exec(url)[1], (url, title) =>
                             chrome.storage.local.set({ 'url': url, 'title': title }, function () {
                                 window.location.href = chrome.extension.getURL('link.html');
                             }), handleErr);
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('directDownload').addEventListener('click', function () {
 
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/'] },  
+            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
                     document.getElementById('buttonsContainer').classList.add('hide');
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
                             window.location.href = chrome.extension.getURL('notice.html');
                         }
-                        retriveURL(url, function (url, title) {
+                        retriveURL(/id=(\d+)/.exec(url)[1], function (url, title) {
                             chrome.downloads.download({ url: url, filename: title });
                             chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
                                 window.location.href = chrome.extension.getURL('success.html');
@@ -75,16 +75,22 @@ document.addEventListener('DOMContentLoaded', function () {
                             chrome.cookies.remove({ url: "https://xmum.mediasitecloud.jp/", name: cookie.name });
                         });
 
-                        chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
-
-                            var url = currentTabs[0].url;
-                            chrome.storage.local.set({ 'success': 'Error fixed' }, function () {
-                                window.location.href = chrome.extension.getURL('success.html');
+                        chrome.cookies.getAll({ url: "https://mymedia.xmu.edu.cn/" }, function (cookies) {
+                            cookies.forEach(function (cookie) {
+                                chrome.cookies.remove({ url: "https://mymedia.xmu.edu.cn/", name: cookie.name });
                             });
-                            if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
-                                return;
-                            }
-                            chrome.tabs.reload();
+
+                            chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
+
+                                var url = currentTabs[0].url;
+                                chrome.storage.local.set({ 'success': 'Error fixed' }, function () {
+                                    window.location.href = chrome.extension.getURL('success.html');
+                                });
+                                if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
+                                    return;
+                                }
+                                chrome.tabs.reload();
+                            });
                         });
                     });
 

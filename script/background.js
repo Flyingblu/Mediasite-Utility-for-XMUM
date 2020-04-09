@@ -18,22 +18,40 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Directly donwload",
         "contexts": ["link"]
     });
+
+    chrome.runtime.onMessage.addListener(
+        function (request, sender, sendResponse) {
+            if (request.name == "getLink") {
+                chrome.permissions.request(
+                    { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
+                    function (granted) {
+                        if (granted) {
+                            retriveURL(request.moodle_id, (url, title) =>
+                                chrome.storage.local.set({ 'url': url, 'title': title }, function () {
+                                    chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
+                                }), handleErr);
+                        }
+                    });
+            }
+        })
+
     chrome.contextMenus.onClicked.addListener(function (triggerInfo) {
         if (!triggerInfo.linkUrl.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
             chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('notice.html'), width: 420, height: 230 });
             return;
         }
+        var video_id = /id=(\d+)/.exec(triggerInfo.linkUrl)[1];
         chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://xmum.mediasitecloud.jp/'] },
+            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
                     if (triggerInfo.menuItemId === 'getDownloadLinkMenu') {
-                        retriveURL(triggerInfo.linkUrl, (url, title) =>
+                        retriveURL(video_id, (url, title) =>
                             chrome.storage.local.set({ 'url': url, 'title': title }, function () {
                                 chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                             }), handleErr);
                     } else if (triggerInfo.menuItemId === 'directDownloadMenu') {
-                        retriveURL(triggerInfo.linkUrl, function (url, title) {
+                        retriveURL(video_id, function (url, title) {
                             chrome.downloads.download({ url: url, filename: title });
                             chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
                                 chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('success.html'), width: 420, height: 210 });

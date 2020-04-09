@@ -21,11 +21,10 @@ export async function getMediasiteCookies(api_response, handleErr) {
     return { name: 'MediasiteAuthTickets-' + mediasite_id, value: /authTicket=([a-z 0-9]+)/.exec(response)[1], domain: /https:\/\/[^\/]+/.exec(url)[0] };
 }
 
-export function retriveURL(srcURL, callback, handleErr) {
+export function retriveURL(video_id, callback, handleErr) {
     chrome.cookies.get({ url: "https://l.xmu.edu.my/", name: "MoodleSession" }, function (cookie) {
 
         if (cookie === null) handleErr(new Error('Your moodle session is invalid, please refresh to login moodle. '));
-        var video_id = /\d+/.exec(srcURL)[0];
 
         var myHeaders = new Headers();
         myHeaders.append("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
