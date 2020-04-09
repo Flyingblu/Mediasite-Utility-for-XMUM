@@ -11,8 +11,8 @@ function add_btn(link) {
     dest_node.insertBefore(btn, dest_node.firstChild);
 }
 
-document.querySelector('.course-content').addEventListener('click', function(event) {
+document.querySelector('.course-content').addEventListener('click', function (event) {
     var id = event.target.id;
     if (!id || !/^MDX-(\d+)/.exec(id)) return;
-    chrome.runtime.sendMessage({name: 'getLink', moodle_id: /^MDX-(\d+)/.exec(id)[1]});
+    chrome.runtime.sendMessage({ name: 'getLink', video_id: /^MDX-(\d+)/.exec(id)[1] });
 });
