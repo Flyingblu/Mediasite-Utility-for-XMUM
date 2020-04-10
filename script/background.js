@@ -37,21 +37,19 @@ chrome.runtime.onMessage.addListener(
                         chrome.storage.local.set({ 'video_id': request.video_id, 'task': 'getLink' }, function () {
                             chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                         });
-                    } else if (request.name === 'getPercentage') {
-                        getViewPercentage(request.video_id, result => sendResponse({ percentage: (result * 100).toFixed(1) + '%' }));
                     }
                 }
             });
     });
 
-    chrome.runtime.onConnect.addListener(function(port) {
-        if (port.name === 'getPercentage') {
-            port.onMessage.addListener(function(msg) {
-                getViewPercentage(msg.video_id, result => port.postMessage({id: msg.video_id, percentage: (result * 100).toFixed(1) + '%' }));
-            });
-        }
-      });
-      
+chrome.runtime.onConnect.addListener(function (port) {
+    if (port.name === 'getPercentage') {
+        port.onMessage.addListener(function (msg) {
+            getViewPercentage(msg.video_id, result => port.postMessage({ id: msg.video_id, percentage: (result * 100).toFixed(1) + '%' }), () => port.postMessage({ id: msg.video_id, error: true }));
+        });
+    }
+});
+
 
 chrome.contextMenus.onClicked.addListener(function (triggerInfo) {
     if (!triggerInfo.linkUrl.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {

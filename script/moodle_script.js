@@ -37,7 +37,10 @@ function createLinkBtn(percentage) {
 function createPercentage(btn) {
     var port = chrome.runtime.connect({ name: "getPercentage" });
     port.onMessage.addListener(function (msg) {
-        if (!/\d+.\d+%/.exec(msg.percentage)) return;
+        if (msg.error ||!/\d+.\d+%/.exec(msg.percentage)) {
+            document.querySelector('span#MDXp-' + msg.id).style.color = 'red';
+            return;
+        }
         document.querySelector('span#MDXp-' + msg.id).innerText = msg.percentage;
     });
 
@@ -68,6 +71,13 @@ function createPercentage(btn) {
 
     var all_links = document.querySelectorAll('.modtype_mediasite');
     all_links.forEach(addPercentage);
+    document.querySelector('.course-content').addEventListener('click', function (event) {
+        var id = event.target.id;
+        if (!id || !/^MDXp-(\d+)/.exec(id)) return;
+        event.target.style.color = '';
+        event.target.innerText = '--.-%';
+        port.postMessage({ video_id: /^MDXp-(\d+)/.exec(id)[1] });
+    });
 }
 
 chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled'], function (results) {
