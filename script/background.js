@@ -1,3 +1,5 @@
+import { getViewPercentage } from './helpers.js'
+
 function handleErr(error) {
     chrome.storage.local.set({ 'error': error.message }, function () {
         chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('error.html'), width: 420, height: 210 });
@@ -22,7 +24,7 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Report as viewed",
         "contexts": ["link"]
     });
-    chrome.storage.local.set({ 'link_btn_enabled': true });
+    chrome.storage.local.set({ 'link_btn_enabled': true, 'percentage_enabled': true });
 });
 
 chrome.runtime.onMessage.addListener(
@@ -31,15 +33,25 @@ chrome.runtime.onMessage.addListener(
             { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    if (request.name == "getLink") {
+                    if (request.name === 'getLink') {
                         chrome.storage.local.set({ 'video_id': request.video_id, 'task': 'getLink' }, function () {
                             chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                         });
+                    } else if (request.name === 'getPercentage') {
+                        getViewPercentage(request.video_id, result => sendResponse({ percentage: (result * 100).toFixed(1) + '%' }));
                     }
                 }
             });
+    });
 
-    })
+    chrome.runtime.onConnect.addListener(function(port) {
+        if (port.name === 'getPercentage') {
+            port.onMessage.addListener(function(msg) {
+                getViewPercentage(msg.video_id, result => port.postMessage({id: msg.video_id, percentage: (result * 100).toFixed(1) + '%' }));
+            });
+        }
+      });
+      
 
 chrome.contextMenus.onClicked.addListener(function (triggerInfo) {
     if (!triggerInfo.linkUrl.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {

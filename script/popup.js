@@ -5,8 +5,9 @@ function handleErr(error) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get(['link_btn_enabled'], function (results) {
+    chrome.storage.local.get(['link_btn_enabled', 'percentage_enabled'], function (results) {
         if (results['link_btn_enabled']) document.getElementById('linkBtnCheckbox').checked = true;
+        if (results['percentage_enabled']) document.getElementById('percentageSpanCheckbox').checked = true;
     });
 
     document.getElementById('getLink').addEventListener('click', function () {
@@ -96,5 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('linkBtnCheckbox').addEventListener('click', function (event) {
         chrome.storage.local.set({ 'link_btn_enabled': event.target.checked });
+    }, false);
+    document.getElementById('percentageSpanCheckbox').addEventListener('click', function (event) {
+        chrome.storage.local.set({ 'percentage_enabled': event.target.checked });
     }, false);
 }, false);
