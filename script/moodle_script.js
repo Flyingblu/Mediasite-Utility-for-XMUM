@@ -7,9 +7,13 @@ chrome.storage.local.get(['link_btn_enabled'], function (results) {
         var btn = document.createElement('button');
         btn.setAttribute('id', 'MDX-' + id);
         btn.innerText = 'Link';
-        btn.style = 'margin-right: 5px;';
         btn.classList.add('btn');
         btn.classList.add('btn-secondary');
+        if (dest_node.querySelector('.contentafterlink')) {
+            btn.style = 'margin-left: 30px;margin-right: -25px';
+        } else {
+            btn.style = 'margin-right: 5px;';
+        }
         dest_node.insertBefore(btn, dest_node.firstChild);
     }
 
