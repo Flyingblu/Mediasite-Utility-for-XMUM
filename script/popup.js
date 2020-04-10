@@ -1,5 +1,3 @@
-import { retriveURL } from './helpers.js';
-
 function handleErr(error) {
     chrome.storage.local.set({ 'error': error.message }, function () {
         window.location.href = chrome.extension.getURL('error.html');
@@ -23,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
                             window.location.href = chrome.extension.getURL('notice.html');
                         }
-                        chrome.storage.local.set({ 'video_id': /id=(\d+)/.exec(url)[1] }, function () {
+                        chrome.storage.local.set({ 'video_id': /id=(\d+)/.exec(url)[1], 'task': 'getLink' }, function () {
                             window.location.href = chrome.extension.getURL('link.html');
                         });
                     });
@@ -40,21 +38,15 @@ document.addEventListener('DOMContentLoaded', function () {
             { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
             function (granted) {
                 if (granted) {
-                    document.getElementById('buttonsContainer').classList.add('hide');
-                    document.getElementById('loadingIndicator').classList.remove('hide');
-
                     chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
 
                         var url = currentTabs[0].url;
                         if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
                             window.location.href = chrome.extension.getURL('notice.html');
                         }
-                        retriveURL(/id=(\d+)/.exec(url)[1], function (url, title) {
-                            chrome.downloads.download({ url: url, filename: title });
-                            chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
-                                window.location.href = chrome.extension.getURL('success.html');
-                            });
-                        }, handleErr);
+                        chrome.storage.local.set({ 'video_id': /id=(\d+)/.exec(url)[1], 'task': 'download' }, function () {
+                            window.location.href = chrome.extension.getURL('link.html');
+                        });
                     });
 
                 } else {
@@ -106,4 +98,3 @@ document.addEventListener('DOMContentLoaded', function () {
         chrome.storage.local.set({ 'link_btn_enabled': event.target.checked });
     }, false);
 }, false);
-

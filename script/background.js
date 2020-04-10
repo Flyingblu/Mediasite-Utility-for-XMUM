@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(
             function (granted) {
                 if (granted) {
                     if (request.name == "getLink") {
-                        chrome.storage.local.set({ 'video_id': request.video_id }, function () {
+                        chrome.storage.local.set({ 'video_id': request.video_id, 'task': 'getLink' }, function () {
                             chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                         });
                     }
@@ -47,10 +47,13 @@ chrome.contextMenus.onClicked.addListener(function (triggerInfo) {
         function (granted) {
             if (granted) {
                 if (triggerInfo.menuItemId === 'getDownloadLinkMenu') {
-                    chrome.storage.local.set({ 'video_id': video_id }, function () {
+                    chrome.storage.local.set({ 'video_id': video_id, 'task': 'getLink' }, function () {
                         chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                     });
                 } else if (triggerInfo.menuItemId === 'directDownloadMenu') {
+                    chrome.storage.local.set({ 'video_id': video_id, 'task': 'download' }, function () {
+                        chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
+                    });
                 }
             }
         });

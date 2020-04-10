@@ -51,7 +51,16 @@ function displayResult(url, title) {
     dataField.appendChild(prompt);
 }
 
-chrome.storage.local.get(['video_id'], function (results) {
-    retriveURL(results['video_id'], (url, title) =>
+chrome.storage.local.get(['video_id', 'task'], function (results) {
+    if (results['task'] && results['task'] === 'download') {
+        retriveURL(results['video_id'], function (url, title) {
+            chrome.downloads.download({ url: url, filename: title + '.mp4' });
+            chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
+                window.location.href = chrome.extension.getURL('success.html');
+            });
+        }, handleErr);
+    } else {
+        retriveURL(results['video_id'], (url, title) =>
         displayResult(url, title), handleErr);
+    }
 });
