@@ -17,6 +17,11 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Directly donwload",
         "contexts": ["link"]
     });
+    chrome.contextMenus.create({
+        "id": "reportMediaView",
+        "title": "Report as viewed",
+        "contexts": ["link"]
+    });
     chrome.storage.local.set({ 'link_btn_enabled': true });
 });
 
@@ -52,6 +57,10 @@ chrome.contextMenus.onClicked.addListener(function (triggerInfo) {
                     });
                 } else if (triggerInfo.menuItemId === 'directDownloadMenu') {
                     chrome.storage.local.set({ 'video_id': video_id, 'task': 'download' }, function () {
+                        chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
+                    });
+                } else if (triggerInfo.menuItemId === 'reportMediaView') {
+                    chrome.storage.local.set({ 'video_id': video_id, 'task': 'reportMediaView' }, function () {
                         chrome.windows.create({ type: 'popup', url: chrome.extension.getURL('link.html'), width: 520, height: 300 });
                     });
                 }

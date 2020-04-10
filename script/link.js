@@ -1,4 +1,4 @@
-import { retriveURL } from './helpers.js';
+import { retriveURL, reportMediaView } from './helpers.js';
 
 function handleErr(error) {
     chrome.storage.local.set({ 'error': error.message }, function () {
@@ -52,15 +52,25 @@ function displayResult(url, title) {
 }
 
 chrome.storage.local.get(['video_id', 'task'], function (results) {
-    if (results['task'] && results['task'] === 'download') {
+    if (!results['task']) {
+        handleErr(new Error('Link.js: Bad task request. '));
+        return;
+    }
+    if (results['task'] === 'download') {
         retriveURL(results['video_id'], function (url, title) {
             chrome.downloads.download({ url: url, filename: title + '.mp4' });
             chrome.storage.local.set({ 'success': 'Your download will start shortly...' }, function () {
                 window.location.href = chrome.extension.getURL('success.html');
             });
         }, handleErr);
-    } else {
+    } else if (results['task'] === 'getLink') {
         retriveURL(results['video_id'], (url, title) =>
         displayResult(url, title), handleErr);
+    } else if (results['task'] === 'reportMediaView') {
+        reportMediaView(results['video_id'],function () {
+            chrome.storage.local.set({ 'success': 'Reported successfully!' }, function () {
+                window.location.href = chrome.extension.getURL('success.html');
+            });
+         }, handleErr);
     }
 });
