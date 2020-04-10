@@ -7,6 +7,10 @@ function handleErr(error) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    chrome.storage.local.get(['link_btn_enabled'], function (results) {
+        if (results['link_btn_enabled']) document.getElementById('linkBtnCheckbox').checked = true;
+    });
+
     document.getElementById('getLink').addEventListener('click', function () {
 
         chrome.permissions.request(
@@ -96,6 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
+    }, false);
+
+    document.getElementById('linkBtnCheckbox').addEventListener('click', function (event) {
+        chrome.storage.local.set({ 'link_btn_enabled': event.target.checked });
     }, false);
 }, false);
 

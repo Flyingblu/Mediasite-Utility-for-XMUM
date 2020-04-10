@@ -17,6 +17,7 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Directly donwload",
         "contexts": ["link"]
     });
+    chrome.storage.local.set({ 'link_btn_enabled': true });
 });
 
 chrome.runtime.onMessage.addListener(
