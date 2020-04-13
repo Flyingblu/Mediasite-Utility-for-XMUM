@@ -100,7 +100,7 @@ export function reportMediaView(video_id, callback, handleErr) {
         var presentation = result['d']['Presentation']
         var ticket = presentation['PlaybackTicketId'];
         var duration = Math.floor(presentation['Duration'] / 1000).toString();
-        var domain = /site=([a-z 0-9 \.]+)/.exec(presentation['Streams'][0]['VideoUrls'][0]['Location'])[1];
+        var domain = 'mymedia.xmu.edu.cn';
 
         var myHeaders = new Headers();
         myHeaders.append("Accept", "application/json, text/javascript, */*; q=0.01");
