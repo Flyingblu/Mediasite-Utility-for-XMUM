@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener(function () {
     });
     chrome.contextMenus.create({
         "id": "reportMediaView",
-        "title": "Report as viewed",
+        "title": "Report as watched",
         "contexts": ["link"]
     });
     chrome.storage.local.set({ 'link_btn_enabled': true, 'percentage_enabled': true });
