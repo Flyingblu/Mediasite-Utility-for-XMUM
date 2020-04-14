@@ -1,6 +1,6 @@
 # 安装步骤
 
-同学们可以在[本链接](https://github.com/Flyingblu/XMUM-Mediasite-downloader/releases/download/0.7/XMUM-Mediasite-downloader.zip)下载最新版本插件压缩包<br><br>
+同学们可以在[本链接](https://github.com/Flyingblu/XMUM-Mediasite-downloader/releases/download/0.9/Mediasite-Utility-for-XMUM.zip)下载最新版本插件压缩包<br><br>
 下载压缩包后，请解压至一个单独文件夹。打开chrome，在地址栏输入`chrome://extensions`并打开。<br>
 ![extension path](https://github.com/Flyingblu/XMUM-Mediasite-downloader/raw/master/images/chrome%20extension.png "extension path")<br>
 在打开的页面上，先在右上角打开开发者模式，再选择左上角的加载包。<br>

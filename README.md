@@ -1,8 +1,11 @@
-# XMUM Mediasite downloader
+# Mediasite Utility for XMUM
 
-此Chrome插件有两个主要功能
+此Chrome插件有三个主要功能
 * 获取链接 & 下载视频
 * 一键消除Access denied错误
+* 获取视频播放完成百分比
+
+此外，本插件还有一键记录完整视频观看记录的实验性功能。该功能实际有效性不确定，请大家谨慎使用。<br>
 
 如对此插件有任何疑问，欢迎在issues中讨论！
 
