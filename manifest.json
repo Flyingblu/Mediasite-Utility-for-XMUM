@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Mediasite Utility for XMUM",
     "description": "This extension automatically extracts the download link for a Mediasite video",
-    "version": "1.0",
+    "version": "1.1",
     "icons": {
         "16": "icon.png",
         "48": "icon.png",

@@ -10,54 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (results['percentage_enabled']) document.getElementById('percentageSpanCheckbox').checked = true;
         if (results['remove_player_enabled']) document.getElementById('removePlayerCheckbox').checked = true;
     });
-
-    document.getElementById('getLink').addEventListener('click', function () {
-
-        chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
-            function (granted) {
-                if (granted) {
-                    chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
-
-                        var url = currentTabs[0].url;
-                        if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
-                            window.location.href = chrome.extension.getURL('notice.html');
-                        }
-                        chrome.storage.local.set({ 'video_id': /id=(\d+)/.exec(url)[1], 'task': 'getLink' }, function () {
-                            window.location.href = chrome.extension.getURL('link.html');
-                        });
-                    });
-                } else {
-                    handleErr(new Error("Permission is needed to access data on the website!\nPlease try again. "));
-                }
-            });
-
-    }, false);
-
-    document.getElementById('directDownload').addEventListener('click', function () {
-
-        chrome.permissions.request(
-            { origins: ['https://l.xmu.edu.my/', 'https://mymedia.xmu.edu.cn/', 'https://xmum.mediasitecloud.jp/'] },
-            function (granted) {
-                if (granted) {
-                    chrome.tabs.query({ currentWindow: true, active: true }, function (currentTabs) {
-
-                        var url = currentTabs[0].url;
-                        if (!url.includes('https://l.xmu.edu.my/mod/mediasite/view.php?id=')) {
-                            window.location.href = chrome.extension.getURL('notice.html');
-                        }
-                        chrome.storage.local.set({ 'video_id': /id=(\d+)/.exec(url)[1], 'task': 'download' }, function () {
-                            window.location.href = chrome.extension.getURL('link.html');
-                        });
-                    });
-
-                } else {
-                    alert("Permission is needed to access data on the website!\nPlease try again. ");
-                }
-            });
-
-    }, false);
-
+    
     document.getElementById('fixAuth').addEventListener('click', function () {
 
         chrome.permissions.request(
