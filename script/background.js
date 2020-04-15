@@ -45,7 +45,7 @@ chrome.runtime.onMessage.addListener(
 chrome.runtime.onConnect.addListener(function (port) {
     if (port.name === 'getPercentage') {
         port.onMessage.addListener(function (msg) {
-            getViewPercentage(msg.video_id, result => port.postMessage({ id: msg.video_id, percentage: (result * 100).toFixed(1) + '%' }), () => port.postMessage({ id: msg.video_id, error: true }));
+            getViewPercentage(msg.video_id, result => port.postMessage({ id: msg.video_id, viewTimeCount: result.viewTimeCount, duration: result.duration }), () => port.postMessage({ id: msg.video_id, error: true }));
         });
     }
 });

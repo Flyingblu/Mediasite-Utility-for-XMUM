@@ -139,7 +139,10 @@ export function getViewPercentage(video_id, callback, handleErr) {
         coverage.forEach(function (item) {
             viewTimeCount += item['Duration'];
         });
-        var percentage = viewTimeCount / duration;
-        callback(percentage);
+        var result = {
+            duration: duration, 
+            viewTimeCount: viewTimeCount
+        }
+        callback(result);
     }
 }

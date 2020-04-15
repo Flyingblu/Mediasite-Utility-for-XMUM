@@ -37,11 +37,16 @@ function createLinkBtn(percentage) {
 function createPercentage(btn) {
     var port = chrome.runtime.connect({ name: "getPercentage" });
     port.onMessage.addListener(function (msg) {
-        if (msg.error ||!/\d+.\d+%/.exec(msg.percentage)) {
+        if (msg.error) {
             document.querySelector('span#MDXp-' + msg.id).style.color = 'red';
             return;
         }
-        document.querySelector('span#MDXp-' + msg.id).innerText = msg.percentage;
+        var listItem = document.querySelector('li#module-' + msg.id);
+        listItem.querySelector('span#MDXp-' + msg.id).innerText = (msg.viewTimeCount / msg.duration * 100).toFixed(1) + '%';
+        var length = Math.floor(msg.duration / 60) + ':' + (msg.duration % 60)
+        var courseTitle = listItem.querySelector('span.instancename').firstChild;
+        if (!/\[\d+\:\d+\]/.exec(courseTitle.textContent))
+            courseTitle.textContent += ' [' + length + ']';
     });
 
     function addPercentage(link) {
