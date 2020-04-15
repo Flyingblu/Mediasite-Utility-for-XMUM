@@ -24,7 +24,7 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Report as watched",
         "contexts": ["link"]
     });
-    chrome.storage.local.set({ 'link_btn_enabled': true, 'percentage_enabled': true });
+    chrome.storage.local.set({ 'link_btn_enabled': true, 'percentage_enabled': true, 'remove_player_enabled': false });
 });
 
 chrome.runtime.onMessage.addListener(

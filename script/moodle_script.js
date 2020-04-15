@@ -43,7 +43,7 @@ function createPercentage(btn) {
         }
         var listItem = document.querySelector('li#module-' + msg.id);
         listItem.querySelector('span#MDXp-' + msg.id).innerText = (msg.viewTimeCount / msg.duration * 100).toFixed(1) + '%';
-        var length = Math.floor(msg.duration / 60) + ':' + (msg.duration % 60)
+        var length = ('0' + Math.floor(msg.duration / 60)).slice(-2) + ':' + ('0' + msg.duration % 60).slice(-2);
         var courseTitle = listItem.querySelector('span.instancename').firstChild;
         if (!/\[\d+\:\d+\]/.exec(courseTitle.textContent))
             courseTitle.textContent += ' [' + length + ']';
@@ -85,16 +85,13 @@ function createPercentage(btn) {
     });
 }
 
-chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled'], function (results) {
-    if (results['percentage_enabled']) {
-        if (results['link_btn_enabled']) {
-            createPercentage(true);
-            createLinkBtn(true);
-        } else {
-            createPercentage(false);
-        }
-    } else {
-        if (results['link_btn_enabled'])
-            createLinkBtn(false);
-    }
+chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'remove_player_enabled'], function (results) {
+
+    if (results['percentage_enabled'])
+        createPercentage(results['link_btn_enabled']);
+    if (results['link_btn_enabled'])
+        createLinkBtn(results['percentage_enabled']);
+
+    if (results['remove_player_enabled'])
+        document.querySelectorAll('.contentafterlink').forEach(elem => elem.parentNode.removeChild(elem));
 });
