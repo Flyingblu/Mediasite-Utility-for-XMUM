@@ -5,12 +5,13 @@ function handleErr(error) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get(['link_btn_enabled', 'percentage_enabled', 'remove_player_enabled'], function (results) {
+    chrome.storage.local.get(['link_btn_enabled', 'percentage_enabled', 'remove_player_enabled', 'right_click_prompt'], function (results) {
         if (results['link_btn_enabled']) document.getElementById('linkBtnCheckbox').checked = true;
         if (results['percentage_enabled']) document.getElementById('percentageSpanCheckbox').checked = true;
         if (results['remove_player_enabled']) document.getElementById('removePlayerCheckbox').checked = true;
+        if (results['right_click_prompt']) document.getElementById('rightClickPrompt').classList.remove('hide');
     });
-    
+
     document.getElementById('fixAuth').addEventListener('click', function () {
 
         chrome.permissions.request(
@@ -57,5 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, false);
     document.getElementById('removePlayerCheckbox').addEventListener('click', function (event) {
         chrome.storage.local.set({ 'remove_player_enabled': event.target.checked });
+    }, false);
+    document.getElementById('gotIt').addEventListener('click', function (event) {
+        chrome.storage.local.set({ 'right_click_prompt': false });
+        document.getElementById('rightClickPrompt').classList.add('hide')
     }, false);
 }, false);
