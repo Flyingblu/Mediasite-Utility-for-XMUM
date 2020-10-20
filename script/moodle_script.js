@@ -1,4 +1,4 @@
-function createLinkBtn(percentage) {
+function createLinkBtn() {
     function addLinkBtn(link) {
         var id = /[0-9]+/.exec(link.querySelector('a').getAttribute('href'))[0];
         var dest_node = link.querySelector('.mod-indent').nextElementSibling;
@@ -7,20 +7,7 @@ function createLinkBtn(percentage) {
         btn.innerText = 'Link';
         btn.classList.add('btn');
         btn.classList.add('btn-secondary');
-
-        if (percentage) {
-            if (dest_node.querySelector('.contentafterlink')) {
-                btn.style = 'margin-left: 30px;margin-right: 5px';
-            } else {
-                btn.style = 'margin-right: 5px;';
-            }
-        } else {
-            if (dest_node.querySelector('.contentafterlink')) {
-                btn.style = 'margin-left: 30px;margin-right: -25px';
-            } else {
-                btn.style = 'margin-right: 5px;';
-            }
-        }
+        btn.style = 'margin-right: 5px;';
 
         dest_node.insertBefore(btn, dest_node.firstChild);
     }
@@ -34,7 +21,7 @@ function createLinkBtn(percentage) {
     });
 }
 
-function createPercentage(btn) {
+function createPercentage(autoload) {
     var port = chrome.runtime.connect({ name: "getPercentage" });
     port.onMessage.addListener(function (msg) {
         if (msg.error) {
@@ -55,23 +42,10 @@ function createPercentage(btn) {
         var percentageSpan = document.createElement('span');
         percentageSpan.setAttribute('id', 'MDXp-' + id);
         percentageSpan.innerText = '--.-%';
+        percentageSpan.style = 'margin-right: 5px;';
 
-        if (btn) {
-            if (dest_node.querySelector('.contentafterlink')) {
-                percentageSpan.style = 'margin-right: -25px';
-            } else {
-                percentageSpan.style = 'margin-right: 5px;';
-            }
-        } else {
-            if (dest_node.querySelector('.contentafterlink')) {
-                percentageSpan.style = 'margin-left: 30px;margin-right: -25px';
-            } else {
-                percentageSpan.style = 'margin-right: 5px;';
-            }
-        }
-        
         dest_node.insertBefore(percentageSpan, dest_node.firstChild);
-        port.postMessage({ video_id: id });
+        if (autoload) port.postMessage({ video_id: id });
     }
 
     var all_links = document.querySelectorAll('.modtype_mediasite');
@@ -85,12 +59,12 @@ function createPercentage(btn) {
     });
 }
 
-chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'remove_player_enabled'], function (results) {
+chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'percentage_autoload_enabled', 'remove_player_enabled'], function (results) {
 
     if (results['percentage_enabled'])
-        createPercentage(results['link_btn_enabled']);
+        createPercentage(results['percentage_autoload_enabled']);
     if (results['link_btn_enabled'])
-        createLinkBtn(results['percentage_enabled']);
+        createLinkBtn();
 
     if (results['remove_player_enabled'])
         document.querySelectorAll('.contentafterlink').forEach(elem => elem.parentNode.removeChild(elem));
