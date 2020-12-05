@@ -59,13 +59,19 @@ function createPercentage(autoload) {
     });
 }
 
-chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'percentage_autoload_enabled', 'remove_player_enabled'], function (results) {
+chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'percentage_autoload_enabled', 'collapse_details_enable'], function (results) {
 
     if (results['percentage_enabled'])
         createPercentage(results['percentage_autoload_enabled']);
     if (results['link_btn_enabled'])
         createLinkBtn();
 
-    if (results['remove_player_enabled'])
-        document.querySelectorAll('.contentafterlink').forEach(elem => elem.parentNode.removeChild(elem));
+    if (results['collapse_details_enable'])
+        document.querySelectorAll('.contentafterlink').forEach(elem => {
+            var parent = elem.parentNode
+            parent.removeChild(elem)
+            var detailsElement = document.createElement('details')
+            detailsElement.appendChild(elem)
+            parent.appendChild(detailsElement)
+        });
 });

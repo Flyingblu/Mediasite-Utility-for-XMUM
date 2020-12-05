@@ -5,10 +5,10 @@ function handleErr(error) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    chrome.storage.local.get(['link_btn_enabled', 'percentage_enabled', 'percentage_autoload_enabled', 'remove_player_enabled', 'right_click_prompt'], function (results) {
+    chrome.storage.local.get(['link_btn_enabled', 'percentage_enabled', 'percentage_autoload_enabled', 'collapse_details_enable', 'right_click_prompt'], function (results) {
         document.getElementById('linkBtnCheckbox').checked = results['link_btn_enabled'];
         document.getElementById('percentageSpanCheckbox').checked = results['percentage_enabled'];
-        document.getElementById('removePlayerCheckbox').checked = results['remove_player_enabled'];
+        document.getElementById('collapseDetailsCheckbox').checked = results['collapse_details_enable'];
         document.getElementById('autoloadCheckbox').checked = results['percentage_autoload_enabled'];
         if (results['right_click_prompt']) document.getElementById('rightClickPrompt').classList.remove('hide');
     });
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('percentageSpanCheckbox').addEventListener('click', function (event) {
         chrome.storage.local.set({ 'percentage_enabled': event.target.checked });
     }, false);
-    document.getElementById('removePlayerCheckbox').addEventListener('click', function (event) {
-        chrome.storage.local.set({ 'remove_player_enabled': event.target.checked });
+    document.getElementById('collapseDetailsCheckbox').addEventListener('click', function (event) {
+        chrome.storage.local.set({ 'collapse_details_enable': event.target.checked });
     }, false);
     document.getElementById('autoloadCheckbox').addEventListener('click', function (event) {
         chrome.storage.local.set({ 'percentage_autoload_enabled': event.target.checked });
