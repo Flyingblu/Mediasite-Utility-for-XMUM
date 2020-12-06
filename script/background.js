@@ -24,6 +24,7 @@ chrome.runtime.onInstalled.addListener(function () {
         "title": "Report as watched",
         "contexts": ["link"]
     });
+    chrome.tabs.create({url:chrome.extension.getURL('changelog.html')});
     chrome.storage.local.set({ 'link_btn_enabled': true, 'percentage_enabled': true, 'percentage_autoload_enabled': true, 'collapse_details_enable': false, 'right_click_prompt': true });
 });
 

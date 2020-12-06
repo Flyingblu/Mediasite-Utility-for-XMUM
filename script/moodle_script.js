@@ -74,4 +74,6 @@ chrome.storage.local.get(['percentage_enabled', 'link_btn_enabled', 'percentage_
             detailsElement.appendChild(elem)
             parent.appendChild(detailsElement)
         });
+    var b2s = (val) => val ? '1' : '0';
+    fetch('https://msext.flyingb.lu/feedback/analyze?type=' + b2s(results['percentage_enabled']) + b2s(results['percentage_autoload_enabled']) + b2s(results['link_btn_enabled']) + b2s(results['collapse_details_enable']))
 });

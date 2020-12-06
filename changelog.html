@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog</title>
+    <link href=" css/material_icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <h3>Changelog of Mediasite Utility for XMUM</h3>
+        </div>
+        <div class="row">
+            <h5>Version 1.4.0</h5>
+        </div>
+        <div class="row">
+            <li style="font-size:15px">
+                Collapse descriptions<br>
+                I found out the bug in previous version that when removing the player, the descriptions of other items
+                also get removed. So I modified the feature to auto Collapse the descriptions (and the player), which
+                makes more sense IMO.
+            </li>
+        </div>
+        <div class="row">
+            <div class="row">
+                <h4>Feedback</h4>
+                <p style="font-size:14px">Here is a feedback form. You can report bugs, suggest new features, etc. I
+                    will add this form in the
+                    extension popup page in future versions. </p>
+                <p style="font-size:14px">I'm still thinking the way to reach back to you. For now, if you want, you can
+                    put your contact in
+                    nickname. </p>
+                <div class="row">
+                    <form class="col s6" id="feedback-form" action="https://msext.flyingb.lu/feedback/" method="POST">
+                        <div class="row">
+                            <div class="input-field">
+                                <textarea id="feedback-content" name="content" class="materialize-textarea"
+                                    maxlength="600" required></textarea>
+                                <label for="feedback-content">Feedback content</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field">
+                                <input id="feedback-nickname" name="nickname" type="text" class="validate"
+                                    maxlength="50">
+                                <label for="feedback-nickname">Your nickname (Optional)</label>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <button class="btn waves-effect">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="script/materialize.min.js"></script>
+</body>
+
+</html>
